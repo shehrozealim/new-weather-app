@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather & Forecast Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container" data-theme="default">
+    <header class="app-header">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17.5 19C19.9853 19 22 16.9853 22 14.5C22 12.151 20.2012 10.2223 17.893 10.0211C17.3686 6.58289 14.394 4 10.8 4C6.82355 4 3.5 7.13401 3.5 11C3.5 11.2359 3.5113 11.4691 3.5333 11.6989C1.51618 12.4419 0 14.3414 0 16.5C0 19.5376 2.46243 22 5.5 22H17.5"></path>
+        </svg>
+        <h1>Weather App</h1>
+      </div>
+
+      <form id="search-form" class="search-form" role="search">
+        <div class="input-group">
+          <input 
+            type="text" 
+            id="search-input" 
+            placeholder="Search city or location..." 
+            autocomplete="off" 
+            required 
+            aria-label="Search city or location"
+          />
+          <button type="submit" class="btn btn-icon" aria-label="Search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </div>
+        <button type="button" id="geo-btn" class="btn btn-secondary" title="Use current location" aria-label="Use current location">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+          </svg>
+          <span class="btn-text">My Location</span>
+        </button>
+      </form>
+
+      <div class="unit-toggle-container">
+        <button id="unit-toggle" class="unit-toggle-btn" aria-label="Toggle Temperature Unit">
+          <span id="unit-c" class="unit active">°C</span>
+          <span class="unit-divider">/</span>
+          <span id="unit-f" class="unit">°F</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="recent-searches-section" aria-label="Recent Searches">
+      <div id="recent-chips" class="recent-chips"></div>
+    </section>
+
+    <div id="error-container" class="error-container hidden" role="alert">
+      <svg class="error-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="8" x2="12" y2="12"></line>
+        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+      </svg>
+      <span id="error-message">City not found.</span>
+    </div>
+
+    <main id="main-content" class="main-content">
+      <div id="skeleton-loader" class="skeleton-wrapper hidden">
+        <div class="skeleton-card skeleton-current"></div>
+        <div class="skeleton-grid">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
+      </div>
+
+      <section id="current-weather" class="current-weather-card">
+        <div class="weather-main-info">
+          <div class="location-details">
+            <h2 id="city-name">--</h2>
+            <p id="current-date" class="date-text">--</p>
+            <span id="weather-status-tag" class="status-pill">--</span>
+          </div>
+          <div class="temperature-box">
+            <img id="weather-icon" src="" alt="Weather condition icon" class="weather-icon-lg hidden" />
+            <div class="temp-display">
+              <span id="current-temp">--</span>
+              <span class="temp-unit">°C</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-icon">🌡️</div>
+            <div class="metric-info">
+              <span class="metric-label">Feels Like</span>
+              <span id="feels-like" class="metric-value">--</span>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">💧</div>
+            <div class="metric-info">
+              <span class="metric-label">Humidity</span>
+              <span id="humidity" class="metric-value">--</span>
+            </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">💨</div>
+            <div class="metric-info">
+              <span class="metric-label">Wind Speed</span>
+              <span id="wind-speed" class="metric-value">--</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="forecast-section" aria-label="5-Day Weather Forecast">
+        <h3 class="section-title">5-Day Forecast</h3>
+        <div id="forecast-grid" class="forecast-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <template id="forecast-card-template">
+    <article class="forecast-card">
+      <h4 class="forecast-day">--</h4>
+      <p class="forecast-date">--</p>
+      <img class="forecast-icon" src="" alt="Forecast condition icon" />
+      <p class="forecast-condition">--</p>
+      <div class="forecast-temp-range">
+        <span class="temp-max">--</span>
+        <span class="temp-divider">/</span>
+        <span class="temp-min">--</span>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
